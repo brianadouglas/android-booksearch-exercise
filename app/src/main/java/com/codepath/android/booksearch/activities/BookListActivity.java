@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.codepath.android.booksearch.R;
 import com.codepath.android.booksearch.adapters.BookAdapter;
@@ -63,6 +62,7 @@ public class BookListActivity extends AppCompatActivity {
     // Executes an API call to the OpenLibrary search endpoint, parses the results
     // Converts them into an array of book objects and adds them to the adapter
     private void fetchBooks(String query) {
+        showProgressBar();
         client = new BookClient();
         client.getBooks(query, new JsonHttpResponseHandler() {
             @Override
@@ -81,6 +81,7 @@ public class BookListActivity extends AppCompatActivity {
                             abooks.add(book); // add book through the adapter
                         }
                         bookAdapter.notifyDataSetChanged();
+                        hideProgressBar();
                     }
                 } catch (JSONException e) {
                     // Invalid JSON format, show appropriate error.
@@ -97,7 +98,6 @@ public class BookListActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Toast.makeText(this, "Toolbar clicker works", Toast.LENGTH_LONG).show();
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_book_list, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
@@ -146,14 +146,14 @@ public class BookListActivity extends AppCompatActivity {
         // Return to finish
         return super.onPrepareOptionsMenu(menu);
     }
-//
-//    public void showProgressBar() {
-//        // Show progress item
-//        miActionProgressItem.setVisible(true);
-//    }
-//
-//    public void hideProgressBar() {
-//        // Hide progress item
-//        miActionProgressItem.setVisible(false);
-//    }
+
+    public void showProgressBar() {
+        // Show progress item
+        miActionProgressItem.setVisible(true);
+    }
+
+    public void hideProgressBar() {
+        // Hide progress item
+        miActionProgressItem.setVisible(false);
+    }
 }
